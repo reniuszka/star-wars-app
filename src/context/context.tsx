@@ -1,0 +1,190 @@
+import React, {
+  useState,
+  createContext,
+  useReducer,
+  useContext,
+  ReactNode,
+  useEffect,
+  useCallback,
+} from "react";
+
+// const { SET_LOADING, SET_CHARACTERS, HANDLE_SEARCH, HANDLE_PAGE } = actions;
+import reducer from "./reducer";
+import { CharacterType, FilmType, DataType } from "../types/types";
+
+export type ChildrenTypes = {
+  children: ReactNode;
+};
+export type HomeworldType = {
+  person: string;
+  name: string;
+  population: number;
+  films: string[];
+};
+export type FilmDataType = {
+  person: string;
+  films: FilmType[];
+};
+
+type InitialContextStateType = {
+  isLoading: boolean;
+  results: CharacterType[];
+  newResults: HomeworldType[];
+  newFilms: FilmDataType[];
+  count: number;
+  query: string;
+  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  fetchCharacters: (url: string) => void;
+  fetchFilms: (url: string) => void;
+};
+
+const initialContextState: InitialContextStateType = {
+  isLoading: true,
+  results: [],
+  count: 0,
+  query: "",
+  setQuery: () => {},
+  fetchCharacters: () => {},
+  fetchFilms: () => {},
+  newResults: [],
+  newFilms: [],
+};
+
+export const url_characters: string = "https://swapi.dev/api/people/";
+
+const AppContext = createContext(initialContextState);
+
+const AppProvider = ({ children }: ChildrenTypes) => {
+  const [state, dispatch] = useReducer(reducer, initialContextState);
+  const [query, setQuery] = useState<string>("");
+
+  const fetchCharacters = useCallback(
+    async (url: string): Promise<DataType> => {
+      dispatch({ type: "SET_LOADING" });
+      try {
+        const results: Response = await fetch(url);
+        const data = await results.json();
+        console.log("data", data);
+        dispatch({
+          type: "SET_CHARACTERS",
+          payload: {
+            ...state,
+            results: data.results,
+            count: data.count,
+          },
+        });
+
+        let getPepleDetails = data.results;
+        let newData: HomeworldType[] = [];
+
+        //homeworld call
+        for (let person of getPepleDetails) {
+          const resultsHomeworld: Response = await fetch(person.homeworld);
+          const dataHomeworld = await resultsHomeworld.json();
+
+          newData.push({
+            person: person.name,
+            name: dataHomeworld.name,
+            population: dataHomeworld.population,
+            films: person.films,
+          });
+          console.log(
+            "person-HOMEWORLD call",
+            person.name,
+            "newResults",
+            newData
+          );
+
+          // promises.push(
+          //   //homeworld call
+          //   fetch(person.homeworld).then((response) => {
+          //     person.homeworld = response.data.name;
+          //   }),
+          //   //species call
+          //   person.species.length > 0
+          //     ? fetch(person.species[0]).then((response) => {
+          //         person.species = response.data.name;
+          //       })
+          //     : (person.species = "Human")
+          // );
+        }
+        // Promise.all(promises).then(() => {
+        //   setDataOfCharacters(getPepleDetails);
+        // });
+        // console.log("setDataOfCharacters", dataOfCharacters);
+        dispatch({
+          type: "SET_HOMEWORLD",
+          payload: newData,
+        });
+        return data;
+      } catch (error) {
+        console.log(error);
+        throw new Error("something went wrong to fetch characters");
+      }
+    },
+    [query]
+  );
+
+  const fetchFilms = useCallback(async (url: string): Promise<DataType> => {
+    dispatch({ type: "SET_LOADING" });
+    try {
+      const results: Response = await fetch(url);
+      const data = await results.json();
+      console.log("data films for PERSON", data);
+      dispatch({
+        type: "SET_CHARACTER-FILMS",
+        payload: {
+          ...state,
+          results: data.results,
+        },
+      });
+      let getPersonDetails = data.results;
+      let newFilmData: FilmDataType[] = [];
+      //films call
+      for (let person of getPersonDetails) {
+        let movies: FilmType[] = [];
+        if (person.films.length > 0) {
+          person.films.map(async (film: string) => {
+            const resultsFilm: Response = await fetch(film);
+            const dataFilm = await resultsFilm.json();
+            movies.push(dataFilm);
+          });
+          console.log("movies", movies, "person", person.name);
+          newFilmData.push({
+            person: person.name,
+            films: movies,
+          });
+        }
+        console.log("person-FILM call", person.name, "newFILM", newFilmData);
+      }
+
+      dispatch({
+        type: "SET_FILMS",
+        payload: newFilmData,
+      });
+      return data;
+    } catch (error) {
+      console.log(error);
+      throw new Error("something went wrong to fetch characters");
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCharacters(`${url_characters}?search=${query}`);
+  }, []);
+
+  return (
+    <AppContext.Provider
+      value={{ ...state, setQuery, query, fetchCharacters, fetchFilms }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
+};
+
+//global hook
+export const useGlobalContext = () => {
+  return useContext(AppContext);
+};
+
+export { AppContext, AppProvider };

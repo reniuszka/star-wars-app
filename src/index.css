@@ -1,0 +1,263 @@
+:root {
+  /* colors */
+  --primary-red: #d44545;
+  --primary-blue-light: #2195da;
+  --primary-blue-dark: #011128;
+  --black: #000;
+  --white: #fff;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.87);
+  margin: 0;
+  display: flex;
+  place-items: center;
+  background-color: var(--primary-blue-dark);
+}
+
+a {
+  font-weight: 500;
+  color: var(--primary-blue-ligh);
+  text-decoration: inherit;
+}
+a:hover {
+  color: var(--primary-blue-ligh);
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  overflow-x: hidden;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--white);
+  border: 2px solid var(--primary-red);
+  background-color: var(--primary-red);
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border: 2px solid rgb(15, 45, 70);
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.container {
+  width: 100vw;
+  min-height: 100vh;
+  background-image: url("./assets/wallpaperflare.com_wallpaper.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+}
+.container-character {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+  text-align: center;
+}
+form {
+  background-color: var(--primary-blue-dark);
+  padding: 2rem;
+  border-radius: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  border: 2px solid var(--primary-blue-ligh);
+}
+
+.form-label {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+h4 {
+  color: var(--primary-red);
+}
+.nav-container {
+  margin: 0 auto;
+  width: 90%;
+}
+.footer-container {
+  margin: 0 auto;
+  width: 90%;
+  text-align: center;
+}
+h1 {
+  font-size: 3.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: inline-block;
+  background-image: linear-gradient(to bottom, #4ea7eb, #fc4935);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 0.2rem;
+}
+footer {
+  max-height: 10vh;
+  margin-top: auto;
+  background-color: var(--black);
+}
+.author {
+  padding: 1rem 0rem;
+}
+
+.list {
+  background-color: #b9b0b033;
+  padding: 2rem;
+}
+
+.logo {
+  height: 6.5rem;
+  padding: 1.5rem;
+  will-change: filter;
+  animation: logo-spin infinite 20s linear;
+  transition: filter 300ms;
+}
+.logo.star-wars:hover {
+  filter: drop-shadow(0 0 1.5rem var(--white));
+}
+.form-input:focus {
+  filter: drop-shadow(0 0 0.75rem #e32323);
+}
+
+.form-btn {
+  will-change: filter;
+}
+.form-btn:hover {
+  filter: drop-shadow(0 0 0.75rem #739df8);
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 3rem;
+}
+.list-item {
+  text-align: center;
+  width: 15rem;
+  border: 2px solid var(--primary-red);
+  padding: 2rem;
+  border-radius: 0.5rem;
+  background-color: var(--primary-blue-dark);
+  color: var(--white);
+  list-style-type: none;
+}
+.list-item h2 {
+  color: var(--primary-red);
+}
+.list-item h3 {
+  color: var(--primary-blue-ligh);
+}
+.read-more {
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  margin-top: 2rem;
+  color: var(--white);
+  background-color: var(--primary-red);
+  border: 1px solid var(--primary-blue-ligh);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s;
+}
+.read-more:hover {
+  background-color: var(--primary-blue-dark);
+  color: var(--primary-blue-ligh);
+}
+
+.box {
+  border-top: 1px solid var(--primary-blue-ligh);
+  padding-top: 2rem;
+}
+
+.error-page,
+.films-container {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 90vh;
+  max-height: 100vh;
+  background-color: var(--primary-blue-dark);
+}
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.loading {
+  width: 6rem;
+  height: 6rem;
+  border: 7px solid rgba(232, 56, 56, 0.89);
+  border-radius: 50%;
+  border-top-color: var(--primary-blue-dark);
+  animation: spinner 0.6s linear infinite;
+  margin: 4.5rem auto 0;
+}
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+input {
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  background: rgb(235, 235, 241);
+  border: 2px solid rgb(194, 110, 110);
+  color: var(--primary-blue-dark);
+  will-change: filter;
+}
+
+input:focus {
+  color: var(--primary-blue-dark);
+  outline: 1px solid rgb(238, 51, 51);
+  background: #fff;
+}
+
+@media (max-width: 880px) {
+  nav {
+    flex-direction: column;
+  }
+  form {
+    flex-direction: column;
+  }
+  .loading {
+    margin: 2.5rem auto;
+  }
+  .logo {
+    height: 6.5rem;
+  }
+}
