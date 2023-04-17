@@ -1,16 +1,5 @@
 import { CharacterType, FilmType } from "../types/types";
-
-type HomeworldType = {
-  person: string;
-  name: string;
-  population: number;
-  films: string[];
-};
-
-type FilmDataType = {
-  person: string;
-  films: FilmType[];
-};
+import { HomeworldType, FilmDataType } from "./context";
 
 type ReducerActionType =
   | { type: "SET_LOADING" }

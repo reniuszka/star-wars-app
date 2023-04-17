@@ -2,7 +2,8 @@ Description:
 
 The app build with React18 and TS, using React Router and https://swapi.dev/documentation
 I have expirenced that API responds a bit slow, so please be patient :)
-There are nested calls to get all data for the design
+There are nested calls to get all data for the design.
+I have tried to fetch them using Promise.all but got lost with Typescript to decided to take a different way to fetch data, which is not so pretty.
 
 My STEPS (libraries used):
 

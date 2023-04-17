@@ -5,6 +5,7 @@ type PropTypes = {
   name: string;
   population: number;
 };
+
 const ListItem = ({ person, name, population }: PropTypes) => {
   return (
     <li className="list-item">
@@ -16,7 +17,7 @@ const ListItem = ({ person, name, population }: PropTypes) => {
         <h4>{population}</h4>
       </div>
       <Link to={`/character/${person}`}>
-        <small className="read-more">Read more</small>
+        <button className="read-more">Read more</button>
       </Link>
     </li>
   );

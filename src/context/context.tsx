@@ -8,7 +8,6 @@ import React, {
   useCallback,
 } from "react";
 
-// const { SET_LOADING, SET_CHARACTERS, HANDLE_SEARCH, HANDLE_PAGE } = actions;
 import reducer from "./reducer";
 import { CharacterType, FilmType, DataType } from "../types/types";
 
@@ -64,7 +63,6 @@ const AppProvider = ({ children }: ChildrenTypes) => {
       try {
         const results: Response = await fetch(url);
         const data = await results.json();
-        console.log("data", data);
         dispatch({
           type: "SET_CHARACTERS",
           payload: {
@@ -88,30 +86,8 @@ const AppProvider = ({ children }: ChildrenTypes) => {
             population: dataHomeworld.population,
             films: person.films,
           });
-          console.log(
-            "person-HOMEWORLD call",
-            person.name,
-            "newResults",
-            newData
-          );
-
-          // promises.push(
-          //   //homeworld call
-          //   fetch(person.homeworld).then((response) => {
-          //     person.homeworld = response.data.name;
-          //   }),
-          //   //species call
-          //   person.species.length > 0
-          //     ? fetch(person.species[0]).then((response) => {
-          //         person.species = response.data.name;
-          //       })
-          //     : (person.species = "Human")
-          // );
         }
-        // Promise.all(promises).then(() => {
-        //   setDataOfCharacters(getPepleDetails);
-        // });
-        // console.log("setDataOfCharacters", dataOfCharacters);
+
         dispatch({
           type: "SET_HOMEWORLD",
           payload: newData,
@@ -125,12 +101,11 @@ const AppProvider = ({ children }: ChildrenTypes) => {
     [query]
   );
 
-  const fetchFilms = useCallback(async (url: string): Promise<DataType> => {
+  const fetchFilms = async (url: string): Promise<DataType> => {
     dispatch({ type: "SET_LOADING" });
     try {
       const results: Response = await fetch(url);
       const data = await results.json();
-      console.log("data films for PERSON", data);
       dispatch({
         type: "SET_CHARACTER-FILMS",
         payload: {
@@ -138,36 +113,33 @@ const AppProvider = ({ children }: ChildrenTypes) => {
           results: data.results,
         },
       });
-      let getPersonDetails = data.results;
-      let newFilmData: FilmDataType[] = [];
+      const person = data.results[0];
+      const newFilmData: FilmDataType[] = [];
       //films call
-      for (let person of getPersonDetails) {
-        let movies: FilmType[] = [];
-        if (person.films.length > 0) {
-          person.films.map(async (film: string) => {
-            const resultsFilm: Response = await fetch(film);
-            const dataFilm = await resultsFilm.json();
-            movies.push(dataFilm);
-          });
-          console.log("movies", movies, "person", person.name);
+
+      const movies: FilmType[] = [];
+      if (person.films.length > 0) {
+        person.films.map(async (filmURL: string) => {
+          const resultsFilm: Response = await fetch(filmURL);
+          const dataFilm = await resultsFilm.json();
+          movies.push(dataFilm);
           newFilmData.push({
             person: person.name,
             films: movies,
           });
-        }
-        console.log("person-FILM call", person.name, "newFILM", newFilmData);
+          dispatch({
+            type: "SET_FILMS",
+            payload: newFilmData,
+          });
+        });
       }
 
-      dispatch({
-        type: "SET_FILMS",
-        payload: newFilmData,
-      });
       return data;
     } catch (error) {
       console.log(error);
       throw new Error("something went wrong to fetch characters");
     }
-  }, []);
+  };
 
   useEffect(() => {
     fetchCharacters(`${url_characters}?search=${query}`);

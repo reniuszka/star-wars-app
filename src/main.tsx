@@ -4,7 +4,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import { AppProvider } from "./context/context";
-import Character from "./components/Character";
+import Films from "./components/Films";
 import RootLayout from "./routes/RootLayout";
 import MyErrorElement from "./routes/Error";
 
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: ":character",
-            element: <Character />,
+            element: <Films />,
           },
         ],
       },
