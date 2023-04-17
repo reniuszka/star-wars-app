@@ -114,25 +114,30 @@ const AppProvider = ({ children }: ChildrenTypes) => {
         },
       });
       const person = data.results[0];
-      const newFilmData: FilmDataType[] = [];
-      //films call
+      const filmsArray = data.results[0].films;
+      console.log("person", person, "filmsssss", filmsArray);
+      let newFilmData: FilmDataType[] = [];
+      const newFilms: FilmType[] = [];
 
-      const movies: FilmType[] = [];
-      if (person.films.length > 0) {
-        person.films.map(async (filmURL: string) => {
-          const resultsFilm: Response = await fetch(filmURL);
-          const dataFilm = await resultsFilm.json();
-          movies.push(dataFilm);
-          newFilmData.push({
-            person: person.name,
-            films: movies,
-          });
+      Promise.all(
+        filmsArray.map((urlFilm: string) =>
+          fetch(urlFilm).then((res) => res.json())
+        )
+      )
+        .then((allResponsesFilms: FilmType[]) => {
+          console.log("RESPONSES PROMISE ALL", allResponsesFilms);
+          newFilmData = [{ person: person.name, films: allResponsesFilms }];
+          console.log("newData", newFilmData);
           dispatch({
             type: "SET_FILMS",
             payload: newFilmData,
           });
+          return newFilmData;
+        })
+        .catch((error) => {
+          console.log(error);
+          throw new Error("not able to fetch promises...");
         });
-      }
 
       return data;
     } catch (error) {
